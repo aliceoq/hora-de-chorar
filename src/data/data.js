@@ -1,6 +1,6 @@
-export const CLASSES_PER_DAY = 9; // Quantidade de blocos por dia
-export const START_HOUR = 8; // Início
-export const END_HOUR = 17; // Início
+export const CLASSES_PER_DAY = 15; // Quantidade de blocos por dia
+export const START_HOUR = 7; // Início
+export const END_HOUR = 21; // Início
 
 export function saveData(classes, schedule) {
   localStorage.setItem('classes', JSON.stringify(classes));
