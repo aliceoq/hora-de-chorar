@@ -1,4 +1,15 @@
 import { useMemo, useState } from 'react';
+import { days } from '../../data/data';
+import {
+  Button,
+  EditorContainer,
+  Input,
+  NameContainer,
+  Select,
+  TimeList,
+  TimeSelectorContainer,
+  Title,
+} from './Editor.style';
 
 function Editor({ schedule, classes, addClass }) {
   const [name, setName] = useState('');
@@ -16,6 +27,7 @@ function Editor({ schedule, classes, addClass }) {
     else if (classes.find((el) => el.name === name)) disable = true;
 
     if (times.length <= 0) disable = true;
+    //Checar intervalos
 
     return disable;
   }, [name, times, classes]);
@@ -41,53 +53,58 @@ function Editor({ schedule, classes, addClass }) {
   }
 
   return (
-    <div>
-      <input
-        type='text'
-        value={name}
-        onChange={(event) => setName(event.target.value)}
-      ></input>
-      <button disabled={disableAddClass} onClick={() => handleClickClass()}>
-        Adicionar disciplina
-      </button>
-      <div>
+    <EditorContainer>
+      <Title>adicionar disciplina</Title>
+      <NameContainer>
+        <Input
+          type='text'
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+        />
+        <Button disabled={disableAddClass} onClick={() => handleClickClass()}>
+          Adicionar disciplina
+        </Button>
+      </NameContainer>
+      <TimeList>
         {times.map((time) => (
           <div>
-            {time.day}: {time.start}-{time.end}
+            {days[time.day]}: {time.start}-{time.end}
           </div>
         ))}
-      </div>
-      <select
-        value={time.day}
-        onChange={(event) => setTime({ ...time, day: event.target.value })}
-      >
-        {Object.keys(schedule).map((day) => (
-          <option key={day + 'option'} value={day}>
-            {schedule[day].name}
-          </option>
-        ))}
-      </select>
-      <input
-        type='time'
-        value={time.start}
-        onChange={(event) =>
-          setTime({
-            ...time,
-            start: event.target.value.split(':')[0] + ':00',
-          })
-        }
-      ></input>
-      <input
-        type='time'
-        value={time.end}
-        onChange={(event) =>
-          setTime({ ...time, end: event.target.value.split(':')[0] + ':00' })
-        }
-      ></input>
-      <button disabled={disableAddTime} onClick={() => addTime()}>
-        Adicionar horário
-      </button>
-    </div>
+      </TimeList>
+      <TimeSelectorContainer>
+        <Select
+          value={time.day}
+          onChange={(event) => setTime({ ...time, day: event.target.value })}
+        >
+          {Object.keys(schedule).map((day, index) => (
+            <option key={index} value={day}>
+              {schedule[day].name}
+            </option>
+          ))}
+        </Select>
+        <Input
+          type='time'
+          value={time.start}
+          onChange={(event) =>
+            setTime({
+              ...time,
+              start: event.target.value.split(':')[0] + ':00',
+            })
+          }
+        />
+        <Input
+          type='time'
+          value={time.end}
+          onChange={(event) =>
+            setTime({ ...time, end: event.target.value.split(':')[0] + ':00' })
+          }
+        />
+        <Button disabled={disableAddTime} onClick={() => addTime()}>
+          Adicionar horário
+        </Button>
+      </TimeSelectorContainer>
+    </EditorContainer>
   );
 }
 

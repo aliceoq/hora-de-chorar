@@ -1,17 +1,30 @@
-function Item({ item, onCheck }) {
+import { useState } from 'react';
+import { days } from '../../data/data';
+import { ItemContainer, TitleBox } from './List.style';
+
+function Item({ item, onCheck, onDelete }) {
+  const [checked, setChecked] = useState(item.selected);
+
   return (
-    <div>
-      <input
-        type='checkbox'
-        onChange={(e) => onCheck(e.target.checked, item)}
-      ></input>
-      <div>{item.name}</div>
-      {item.times.map((time) => (
-        <div key={time}>
-          {time.day}: {time.start}-{time.end}
+    <ItemContainer>
+      <TitleBox>
+        <input
+          type='checkbox'
+          defaultChecked={checked}
+          onChange={(e) => {
+            setChecked(e.target.checked);
+            onCheck(e.target.checked, item);
+          }}
+        />
+        <span>{item.name}</span>
+      </TitleBox>
+      {item.times.map((time, index) => (
+        <div key={index}>
+          {days[time.day]}: {time.start}-{time.end}
         </div>
       ))}
-    </div>
+      <button onClick={() => onDelete(item)}>Deletar</button>
+    </ItemContainer>
   );
 }
 

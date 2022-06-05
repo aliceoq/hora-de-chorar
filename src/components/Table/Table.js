@@ -1,54 +1,31 @@
-import { useEffect, useState } from 'react';
-import { classesData, saveData, scheduleData } from '../../data/data';
-import Editor from '../Editor/Editor';
-import List from '../List/List';
-import './Table.css';
+import { CLASSES_PER_DAY, START_HOUR } from '../../data/data';
+import { StyledTable, TableData, TableHeader, TableHeaderTime } from './Table.style';
 
-function Table() {
-  const [schedule, setSchedule] = useState(scheduleData);
-  const [classes, setClasses] = useState(classesData);
-
-  useEffect(() => saveData(classes, schedule), [classes, schedule]);
-
-  function addClass(newClass) {
-    setClasses([...classes, newClass]);
-  }
-
-  function updateSchedule(add, newClass) {
-    newClass.times.forEach((element) => {
-      const classesDay = schedule[element.day].classes;
-      const startIndex = parseInt(element.start) - 8;
-      const endIndex = parseInt(element.end) - 8;
-
-      for (let i = startIndex; i < endIndex; i++) {
-        if (add) classesDay[i].push(newClass.name);
-        else {
-          const index = classesDay[i].findIndex((el) => el === newClass.name);
-          classesDay[i].splice(index, 1);
-        }
-      }
-    });
-
-    setSchedule({ ...schedule });
-  }
+function Table({ schedule }) {
+  const range = Array.apply(0, Array(CLASSES_PER_DAY));
+  const days = Object.keys(schedule);
 
   return (
-    <div>
-      <div className='Table'>
-        {Object.keys(schedule).map((day, index) => (
-          <div key={day}>
-            {schedule[day].name}
-            <div key={day + 'schedule'} className='Day'>
-              {schedule[day].classes.map((value, index) => (
-                <div key={day + index}>{value}</div>
-              ))}
-            </div>
-          </div>
+    <StyledTable>
+      <thead>
+        <tr>
+          <TableHeaderTime>horário</TableHeaderTime>
+          {days.map((day, index) => (
+            <TableHeader key={index}>{schedule[day].name}</TableHeader>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {range.map((el, index) => (
+          <tr key={index}>
+            <TableData key={index}>{START_HOUR + index}</TableData>
+            {days.map((day, id) => (
+              <TableData key={id}>{schedule[day].classes[index].toString()}</TableData>
+            ))}
+          </tr>
         ))}
-      </div>
-      <Editor schedule={schedule} classes={classes} addClass={addClass} />
-      <List itens={classes} updateSchedule={updateSchedule} />
-    </div>
+      </tbody>
+    </StyledTable>
   );
 }
 

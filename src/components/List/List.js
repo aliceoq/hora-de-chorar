@@ -1,12 +1,18 @@
 import Item from './Item';
+import { ListContainer } from './List.style';
 
-function List({ itens, updateSchedule }) {
+function List({ itens, updateClass, deleteClass }) {
   return (
-    <div>
-      {itens.map((value) => (
-        <Item key={value} item={value} onCheck={updateSchedule}></Item>
+    <ListContainer>
+      {itens.map((value, index) => (
+        <Item
+          key={index}
+          item={value}
+          onCheck={updateClass}
+          onDelete={deleteClass}
+        />
       ))}
-    </div>
+    </ListContainer>
   );
 }
 
