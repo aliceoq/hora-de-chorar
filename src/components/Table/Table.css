@@ -1,0 +1,10 @@
+.Table {
+  background-color: red;
+  width: 1fr;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+}
+
+.Day {
+  background-color: blue;
+}
